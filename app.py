@@ -132,10 +132,10 @@ def index2():
             print("In Book DB")
         return render_template("result.html", book_input=book_input, authors=author, image=cover, ratings=rating, books=books_give, words=titles_give)
 
-    @app.route("/logout")
-    def logout():
-        session["name"] = None
-        return redirect("/")
+@app.route("/logout")
+def logout():
+    session["name"] = None
+    return redirect("/")
 
 
 @app.route('/shelf', methods=('GET', 'POST'))

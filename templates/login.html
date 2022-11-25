@@ -2,19 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/styles.css" >
     <title>Bookshelf</title>
 </head>
 <body>
- 
+
 {% block content %}
- 
+    <div class="container-index">
+    <nav>
+      <ul>
+        <li>About us</li>
+        <li>Blog</li>
+      </ul>
+    </nav>
+  </div>
+    <div class="bg">
+        <div class="title-main">
+            <h1>Find Books you Love</h1>
+            <div id="heart"></div>
+        </div>
+
    <h1> Enter Email </h1>
- 
+
    <form action="/login" method="POST">
-      <input placeholder="Name" autocomplete="off" type="text" name="name">
+      <input placeholder="Email" autocomplete="off" type="text" name="name">
       <input type="submit" name="Register">
    </form>
- 
-{% endblock %}
+
+    {% endblock %}
 </body>
 </html>
