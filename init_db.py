@@ -8,8 +8,8 @@ with open('schema.sql') as f:
 
 cur = connection.cursor()
 
-cur.execute("INSERT INTO user (user_name, password) VALUES (?, ?)",
-            ('GraceE', 'grace123456'))
+cur.execute("INSERT INTO user (email) VALUES (?)",
+            ('grace@gmai.com',))
 
 #cur.execute("INSERT INTO TBR (U_ID, B_ID) VALUES (?, ?)",
            # (1, 1))

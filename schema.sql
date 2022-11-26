@@ -15,9 +15,7 @@ DROP TABLE IF EXISTS user;
 
 CREATE TABLE user (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
-    joined TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_name varchar(20)  NOT NULL,
-    password varchar(20) NOT NULL
+    email varchar(20) NOT NULL
 );
 
 
