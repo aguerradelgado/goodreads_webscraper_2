@@ -77,12 +77,14 @@ def index2():
     if request.method == 'POST':
         try:
             book_input = request.form["book-name"]
+            session["book_input"] = book_input
             url = book_page(book_input)
             r = urllib.request.urlopen(url).read()
             soup = BeautifulSoup(r, 'html.parser')
 
             titleNauthor = (soup.title.contents[0]).split('by')  # can consistently get title and author from this
             author = titleNauthor[1].strip() #author name
+            session["author"] = author
 
             # ------------- generate smaller subsets of html to look through ------------ #
             b_tag = soup.body
@@ -94,15 +96,21 @@ def index2():
                     genre = soup.find('a', class_="actionLinkLite bookPageGenreLink").get_text()
                 except AttributeError as err:
                     genre = soup.find('span', class_="u-visuallyHidden").get_text()
+                session["genre"] = genre
                 # get rating
             # ------------------------ get rating -------------------------------- #
             for s in span_tag.children:
                 rating = soup.find('span', {'itemprop': 'ratingValue'}).text.strip()
+                session["rating"] = rating
                 # get cover
             # ------------------------ get cover -------------------------------- #
             for a in a_tag:
                 image = soup.find('img', {'id': 'coverImage'})
                 cover = image['src']
+                session["cover"] = cover
+            #for b in b_tag:
+            #    description = soup.find('span', class_="Formatted").get_text()
+            #    print(description)
             # ------------------ get Giveaway titles-----------------------------#
             for b in b_tag.children:
                 u = soup.find('a', class_="actionLinkLite bookPageGenreLink").get('href')
@@ -110,14 +118,18 @@ def index2():
             poup = BeautifulSoup(page, 'html.parser')  # poup, not to be mistaken with their prettier sister, soup who is the html of the first page
 
             titles = poup.find_all('a', class_='bookTitle')
+            titles_give = []
             for i in titles:
                 titles_give.append(i.get_text())
-
+            session["titles_give"] = titles_give
             #----------------- Get giveaway covers start ---------------------------#
 
             book = poup.find_all("img", class_="bookCover")
+
+            books_give = []
             for element in book:
                 books_give.append(element.attrs['src'])
+            session["books_give"] = books_give
             # ----------------- Get giveaway covers start ---------------------------#
         except:
             error.append("Book not Found")
@@ -130,11 +142,24 @@ def index2():
             conn.close()
         else:
             print("In Book DB")
-        return render_template("result.html", book_input=book_input, authors=author, image=cover, ratings=rating, books=books_give, words=titles_give)
+        return redirect("/result")
+
+@app.route("/result", methods=('Get', 'POST'))
+def result():
+    #session["tbr"] = []
+    if request.method == 'POST':
+        print("button clicked?????")
+        session["tbr"].append(session["book_input"])
+        print(session["tbr"])
+
+    return render_template("result.html", book_input=session["book_input"], authors=session["author"], image=session["cover"],
+                           ratings=session["rating"], books=session["books_give"], words=session["titles_give"], tbr=session["tbr"])
+
 
 @app.route("/logout")
 def logout():
     session["name"] = None
+    session["tbr"] = []
     return redirect("/")
 
 
