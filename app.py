@@ -53,6 +53,18 @@ def book_page(searchterms):
     url = f'https://www.goodreads.com/{link}'
     return url
 
+"""
+def goodreads_description(soup):
+    
+    Scrape info about book
+    :param soup:
+    :return:
+    
+    description = soup.find('div', class_="DetailsLayoutRightParagraph__widthConstrained").get_text()
+    return description
+
+"""
+
 @app.route('/')
 def home():
     # check if the users exist or not
@@ -97,7 +109,17 @@ def index2():
                 except AttributeError as err:
                     genre = soup.find('span', class_="u-visuallyHidden").get_text()
                 session["genre"] = genre
-                # get rating
+
+            """
+            -- desc -- not working but AHHHHHHHH help 
+            for b in b_tag.children:
+
+                description = soup.find('div', class_="TruncatedContent").get_text()
+                session["description"] = description
+                print(session["description"])
+               
+            """
+            # get rating
             # ------------------------ get rating -------------------------------- #
             for s in span_tag.children:
                 rating = soup.find('span', {'itemprop': 'ratingValue'}).text.strip()
@@ -131,6 +153,11 @@ def index2():
                 books_give.append(element.attrs['src'])
             session["books_give"] = books_give
             # ----------------- Get giveaway covers start ---------------------------#
+
+            # description = soup.find('div', class_="DetailsLayoutRightParagraph__widthConstrained").get_text()
+            # session["description"] = description
+            # print(session["description"])
+
         except:
             error.append("Book not Found")
 
@@ -146,20 +173,24 @@ def index2():
 
 @app.route("/result", methods=('Get', 'POST'))
 def result():
+    """
     #session["tbr"] = []
     if request.method == 'POST':
         print("button clicked?????")
         session["tbr"].append(session["book_input"])
         print(session["tbr"])
 
+    :return:
+    """
     return render_template("result.html", book_input=session["book_input"], authors=session["author"], image=session["cover"],
-                           ratings=session["rating"], books=session["books_give"], words=session["titles_give"], tbr=session["tbr"])
+                           ratings=session["rating"], books=session["books_give"], words=session["titles_give"])
+# tbr=session["tbr"]
 
 
 @app.route("/logout")
 def logout():
     session["name"] = None
-    session["tbr"] = []
+    #session["tbr"] = []
     return redirect("/")
 
 
