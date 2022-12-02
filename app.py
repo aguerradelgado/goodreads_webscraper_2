@@ -53,17 +53,21 @@ def book_page(searchterms):
     url = f'https://www.goodreads.com/{link}'
     return url
 
-"""
-def goodreads_description(soup):
+
+"""def goodreads_description(soup):
     
+    :param soup: 
+    :return: 
+    """"""
     Scrape info about book
     :param soup:
-    :return:
+    :return: 
     
+
     description = soup.find('div', class_="DetailsLayoutRightParagraph__widthConstrained").get_text()
     return description
-
 """
+
 
 @app.route('/')
 def home():
@@ -154,9 +158,9 @@ def index2():
             session["books_give"] = books_give
             # ----------------- Get giveaway covers start ---------------------------#
 
-            # description = soup.find('div', class_="DetailsLayoutRightParagraph__widthConstrained").get_text()
+            #description = goodreads_description(soup)
             # session["description"] = description
-            # print(session["description"])
+            #print(description)
 
         except:
             error.append("Book not Found")
@@ -173,24 +177,22 @@ def index2():
 
 @app.route("/result", methods=('Get', 'POST'))
 def result():
-    """
-    #session["tbr"] = []
     if request.method == 'POST':
         print("button clicked?????")
         session["tbr"].append(session["book_input"])
+        mask = session["tbr"]
+        session["tbr"] = mask
         print(session["tbr"])
 
-    :return:
-    """
     return render_template("result.html", book_input=session["book_input"], authors=session["author"], image=session["cover"],
-                           ratings=session["rating"], books=session["books_give"], words=session["titles_give"])
+                           ratings=session["rating"], books=session["books_give"], words=session["titles_give"], tbr=session["tbr"])
 # tbr=session["tbr"]
 
 
 @app.route("/logout")
 def logout():
+    session["tbr"] = []
     session["name"] = None
-    #session["tbr"] = []
     return redirect("/")
 
 
