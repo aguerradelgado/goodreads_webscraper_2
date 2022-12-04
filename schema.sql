@@ -11,13 +11,22 @@ CREATE TABLE book (
 
 );
 
+DROP TABLE IF EXISTS BookTable;
+
+CREATE TABLE BookTable (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Title varchar(20) NOT NULL UNIQUE,
+    Author varchar(20) NOT NULL,
+    Genre varchar(20) NOT NULL,
+    Cover varchar(8000)
+);
+
 DROP TABLE IF EXISTS user;
 
 CREATE TABLE user (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     email varchar(20) NOT NULL
 );
-
 
 
 DROP TABLE IF EXISTS TBR;

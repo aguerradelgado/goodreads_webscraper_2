@@ -21,10 +21,10 @@
         <nav>
             <ul>
                 <li>
-                <a href="index.html" onclick="window.history.go(-1); return false;"> Search for more </a>
+                <a href="index.html" onclick="window.history.go(-1); return false;"> Search for more &#128270; </a>
                 </li>
                 <li>
-                    <a onclick="togglePopup()">See TBR<img src="../static/cart.png" width="30px" height="30px">
+                    <a onclick="togglePopup()"> See TBR &#128218;
                     </a>
                 </li>
             </ul>
@@ -32,14 +32,14 @@
     </header>
 
     <!-- Pop up Cart -->
-    <div class="popup" id="popup-1">
+     <div class="popup" id="popup-1">
         <div class="overlay"></div>
-        <div class="content">
+        <div style="height:auto;" class="content">
             <div class="close-btn" onclick="togglePopup()">&times;</div>
-            <h1>Your TBR List</h1>
+            <h1> &#128212; Your TBR List</h1>
             <div class="list-books">
                 {% for i in tbr %}
-                <h3>{{ i }}</h3> {%endfor%}
+                <h3> {{ i }}</h3> {%endfor%}
                 <ul id="added-book">
                 </ul>
             </div>
@@ -57,19 +57,40 @@
             <h2 class="info-text">by {{ authors }} <br>Average rating: {{ ratings }}<br></h2>
             <p>{{ description }}</p>
         </div>
-        <button id="button-click" onclick="addItem()"><span>Add to TBR</span></button>
+       <form method="POST">
+       <button
+                style="width:auto; height:auto;" id="button-click" type="submit"><span>Add to TBR</span></button>
 
-   <script>
+       </form>
+
+
+
+    <script>
+
        function togglePopup() {
                 document.getElementById("popup-1").classList.toggle("active");
             }
+       function download_csv_file() {
+                var csvFileData = {{ tbr|safe }}
+                var csv = 'To Be Read:\n';
+                csvFileData.forEach(function (row) {
+                    csv += row;
+                    csv += "\n";
+                });
+                var hiddenElement = document.createElement('a');
+                hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                hiddenElement.target = '_blank';
+                hiddenElement.download = 'to_be_read.csv';
+                hiddenElement.click();
+            }
+
    </script>
 
 
 
 
        <nav>
-        <a href="{{ url_for('shelf') }}">Shelf</a>
+         &#128220;<a href="{{ url_for('shelf') }}">History</a>
     </nav>
 
 

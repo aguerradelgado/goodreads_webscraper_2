@@ -6,7 +6,7 @@ import sqlite3
 import datetime
 import time
 
-# comment for testing
+
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -53,17 +53,6 @@ def book_page(searchterms):
     url = f'https://www.goodreads.com/{link}'
     return url
 
-"""
-def goodreads_description(soup):
-    
-    Scrape info about book
-    :param soup:
-    :return:
-    
-    description = soup.find('div', class_="DetailsLayoutRightParagraph__widthConstrained").get_text()
-    return description
-
-"""
 
 @app.route('/')
 def home():
@@ -86,6 +75,11 @@ def login():
 
 @app.route('/index', methods=["POST"])
 def index2():
+    author = ""
+    genre = ""
+    cover = ""
+    description = " "
+    title = " "
     if request.method == 'POST':
         try:
             book_input = request.form["book-name"]
@@ -96,44 +90,35 @@ def index2():
 
             titleNauthor = (soup.title.contents[0]).split('by')  # can consistently get title and author from this
             author = titleNauthor[1].strip() #author name
+            title = titleNauthor[0].strip()
+            session['title'] = title #we need this so the book titles are consistent and there is no redundancy
             session["author"] = author
 
-            # ------------- generate smaller subsets of html to look through ------------ #
+            # ------------- generate smaller subsets of html to look through ------------------------ #
             b_tag = soup.body
             span_tag = soup.body.span
             a_tag = soup.body.a
-            # ------------------------ get genre -------------------------------- #
+            #-------------------------get description ---------- -------------------------------------#
+            description = soup.find('div', {'id': 'description'}).get_text().split("\n")
+            description = description[2]
+            session["description"] = description
+            # ------------------------------- get genre --------------------------------------------- #
             for b in b_tag.children:
                 try:
                     genre = soup.find('a', class_="actionLinkLite bookPageGenreLink").get_text()
                 except AttributeError as err:
                     genre = soup.find('span', class_="u-visuallyHidden").get_text()
                 session["genre"] = genre
-
-            """
-            -- desc -- not working but AHHHHHHHH help 
-            for b in b_tag.children:
-
-                description = soup.find('div', class_="TruncatedContent").get_text()
-                session["description"] = description
-                print(session["description"])
-               
-            """
-            # get rating
-            # ------------------------ get rating -------------------------------- #
+            # ------------------------------------ get rating --------------------------------------- #
             for s in span_tag.children:
                 rating = soup.find('span', {'itemprop': 'ratingValue'}).text.strip()
                 session["rating"] = rating
-                # get cover
-            # ------------------------ get cover -------------------------------- #
+            # ---------------------------------- get cover ------------------------------------------ #
             for a in a_tag:
                 image = soup.find('img', {'id': 'coverImage'})
                 cover = image['src']
                 session["cover"] = cover
-            #for b in b_tag:
-            #    description = soup.find('span', class_="Formatted").get_text()
-            #    print(description)
-            # ------------------ get Giveaway titles-----------------------------#
+            # ----------------------------- get Giveaway titles--------------------------------------#
             for b in b_tag.children:
                 u = soup.find('a', class_="actionLinkLite bookPageGenreLink").get('href')
             page = urllib.request.urlopen(f'https://www.goodreads.com/{u}').read()
@@ -144,54 +129,43 @@ def index2():
             for i in titles:
                 titles_give.append(i.get_text())
             session["titles_give"] = titles_give
-            #----------------- Get giveaway covers start ---------------------------#
-
+            #---------------------------------- Get giveaway covers ----------------------------------#
             book = poup.find_all("img", class_="bookCover")
-
             books_give = []
             for element in book:
                 books_give.append(element.attrs['src'])
             session["books_give"] = books_give
-            # ----------------- Get giveaway covers start ---------------------------#
-
-            # description = soup.find('div', class_="DetailsLayoutRightParagraph__widthConstrained").get_text()
-            # session["description"] = description
-            # print(session["description"])
 
         except:
             error.append("Book not Found")
-
+        #------------------------------- Put new search result in DB ---------------------------------#
         conn = get_db_connection()
-        if book_input not in (conn.execute("Select Title from Book")):
-            conn.execute('INSERT INTO book (Title, Author, Genre, Cover) VALUES (?, ?, ?, ?)',
-                         (book_input, author, genre, cover))
-            conn.commit()
-            conn.close()
-        else:
-            print("In Book DB")
+        try:
+            if session["title"] not in (conn.execute("Select Title from BookTable")):
+                conn.execute('INSERT INTO BookTable (Title, Author, Genre, Cover) VALUES (?, ?, ?, ?)',
+                             (title, author, genre, cover))
+                conn.commit()
+                conn.close()
+        except sqlite3.IntegrityError as bookexists:
+            return redirect("/result")
         return redirect("/result")
 
 @app.route("/result", methods=('Get', 'POST'))
 def result():
-    """
-    #session["tbr"] = []
     if request.method == 'POST':
         print("button clicked?????")
-        session["tbr"].append(session["book_input"])
+        session["tbr"].append(session["title"])
         print(session["tbr"])
 
-    :return:
-    """
-    return render_template("result.html", book_input=session["book_input"], authors=session["author"], image=session["cover"],
-                           ratings=session["rating"], books=session["books_give"], words=session["titles_give"])
-# tbr=session["tbr"]
-
+    return render_template("result.html", book_input=session["title"], authors=session["author"], image=session["cover"],
+                           ratings=session["rating"], books=session["books_give"], words=session["titles_give"], description=session["description"], tbr=session["tbr"])
 
 @app.route("/logout")
 def logout():
-    session["name"] = None
-    #session["tbr"] = []
-    return redirect("/")
+    if request.method == 'POST':
+        session["name"] = None
+        session["tbr"] = []
+        return redirect("/")
 
 
 @app.route('/shelf', methods=('GET', 'POST'))
@@ -199,12 +173,11 @@ def shelf():
     conn = get_db_connection()
     users = conn.execute('Select * FROM user').fetchall()
     TBRs= conn.execute('Select * FROM TBR').fetchall()
-    Books = conn.execute('Select * FROM book').fetchall()
+    Books = conn.execute('Select * FROM BookTable').fetchall()
     conn.close()
-    #users = users, TBRs = TBRs,
     return render_template('shelf.html', Books=Books)
 
 if __name__ == '__main__':
 
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5011)
 

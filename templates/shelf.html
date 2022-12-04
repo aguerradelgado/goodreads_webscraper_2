@@ -6,14 +6,14 @@
 </head>
 <body>
 {% block content %}
-    <h1>{% block title %} User Information {% endblock %}</h1>
+    <h1>{% block title %} Search History {% endblock %}</h1>
     {% for book in Books %}
          <br>
         <div class='post'>
-            <p>{{ book['Title'] }}</p>
-            <p>{{ book['ID'] }}</p>
-            <p>{{ book['Genre'] }}</p>
-            <p>{{ book['Author'] }}</p>
+            <p>Title: {{ book['Title'] }}</p>
+            <p>User ID: {{ book['ID'] }}</p>
+            <p>Genre: {{ book['Genre'] }}</p>
+            <p>Author: {{ book['Author'] }}</p>
         </div>
          <br>
     {% endfor %}

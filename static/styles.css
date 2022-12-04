@@ -53,24 +53,25 @@ body {
 
 .container {
     width: 100%;
-    max-width: fit-content;
-    padding: 2%;
+    min-height: 10vh;
+    padding: 1%;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
-    border-radius: 10px;
-
-}
-
-.container h2 {
+    display: flex;
+    background-color: #ffffffa6;
 
 }
 
 .container img {
     height: 75%;
-    float: left;
-    padding: 15px;
 }
+
+.container h2 {
+    padding: 20px;
+
+}
+
+
 
 .book-container{
     padding: 10px
