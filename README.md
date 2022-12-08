@@ -1,10 +1,18 @@
-# webscrape-goodreads
+# Book-Scraper Website
+
 # Overview
-A flask web application that webscrapes [Goodreads](https://www.goodreads.com/) to find tags that contains information such as author, current giveaways for related genre, and ratings. The user enters the title of the book they want to search for, and the corresponding results are displayed. This software is being created using python, CSS, HTML, and SQL. 
+A flask-based web application that webscrapes [Goodreads](https://www.goodreads.com/) to find tags that contains information such as author, current giveaways for related genre, and ratings. The user enters the title of the book they want to search for, and the corresponding results are displayed. 
 
-<img width="400" alt="Screen Shot 2022-11-08 at 6 12 04 PM" src="https://user-images.githubusercontent.com/68759170/200696094-39c96f33-d714-4cf8-ad09-cdb3258e3880.png">
+# Built With
+<img width="100" src="https://user-images.githubusercontent.com/68759170/206540118-bf6354fb-87b4-4fda-802d-9f8b9a223f07.svg">  <img width="100" src="https://user-images.githubusercontent.com/68759170/206544782-ce9dd16f-73ce-4624-b62e-16b38f40eb3b.png"><img width="150" src="https://user-images.githubusercontent.com/68759170/206543551-37190acc-0850-4f9b-a568-466a492ba27e.png">
 
-<img width="400" alt="Screen Shot 2022-11-08 at 6 12 33 PM" src="https://user-images.githubusercontent.com/68759170/200696105-3e04ac17-78e0-4ca6-aae8-b047484c58ae.png">       <img width="375" alt="Screen Shot 2022-11-08 at 6 12 44 PM" src="https://user-images.githubusercontent.com/68759170/200696113-641a516e-e230-4f6d-9646-ce84bfab1fdd.png">
+
+# Demo
+
+![Dec-08-2022 14-45-06](https://user-images.githubusercontent.com/68759170/206552647-d7cad65f-81a8-4a27-ab7e-55e7d4b21cb0.gif)
+
+
+
 
 # Purpose:
 Allows user to search through Goodreads for book recommendations based off the book of their choosing. User will be able to add the books to their cart, where they can choose to export, as am xml file. This will provide the user with the list of books they want, along with the link to purchase the book at Barnes and Noble. 
