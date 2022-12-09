@@ -75,4 +75,12 @@ User can view history of their viewed books (this still needs to be styled accor
 6. Style the history page to shows the book covers
 7. Add breadcrumbs (links to previous pages) 
 
+&nbsp;
+
+# Acknowledgements 
+- [Jinja Documentation](https://jinja.palletsprojects.com/en/3.1.x/)
+- [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
+- [Flask](https://flask.palletsprojects.com/en/2.2.x/)
+- Professor Greenwell
+
 
