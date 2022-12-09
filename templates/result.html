@@ -53,13 +53,14 @@
         </div>
         <div class="container">
             <img src= {{ image }}>
+            <div class="small"></div>
             <h1 id="book-title">{{ book_input }}</h1>
             <h2 class="info-text">by {{ authors }} <br>Average rating: {{ ratings }}<br></h2>
             <p>{{ description }}</p>
         </div>
        <form method="POST">
        <button
-                style="width:auto; height:auto;" id="button-click" type="submit"><span>Add to TBR</span></button>
+                style="width:100%; height:auto;" id="button-click" type="submit"><span>Add to TBR</span></button>
 
        </form>
 
@@ -89,9 +90,12 @@
 
 
 
-       <nav>
-         &#128220;<a href="{{ url_for('shelf') }}">History</a>
-    </nav>
+       <div class="parent-shelf">
+           <div class="shelf">
+            &#128220;<a href="{{ url_for('shelf') }}">History</a>
+               </div>
+
+       </div>
 
 
     <div class="results">

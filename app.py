@@ -65,6 +65,7 @@ def home():
 @app.route("/login", methods=["POST", "GET"])
 def login():
     # if form is submited
+    session["tbr"] = []
     if request.method == "POST":
         # record the user name
         session["name"] = request.form.get("name")
@@ -114,10 +115,11 @@ def index2():
                 rating = soup.find('span', {'itemprop': 'ratingValue'}).text.strip()
                 session["rating"] = rating
             # ---------------------------------- get cover ------------------------------------------ #
-            for a in a_tag:
-                image = soup.find('img', {'id': 'coverImage'})
-                cover = image['src']
-                session["cover"] = cover
+            image = soup.find('img', {'id':'coverImage'})
+            cover = image['src']
+            session["cover"] = cover
+            print(cover)
+
             # ----------------------------- get Giveaway titles--------------------------------------#
             for b in b_tag.children:
                 u = soup.find('a', class_="actionLinkLite bookPageGenreLink").get('href')
@@ -165,7 +167,7 @@ def logout():
     if request.method == 'POST':
         session["name"] = None
         session["tbr"] = []
-        return redirect("/")
+    return redirect("/login")
 
 
 @app.route('/shelf', methods=('GET', 'POST'))

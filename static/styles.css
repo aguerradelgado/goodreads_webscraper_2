@@ -53,22 +53,35 @@ body {
 
 .container {
     width: 100%;
-    min-height: 10vh;
+    max-width: fit-content;
     padding: 1%;
     align-items: center;
     justify-content: center;
-    display: flex;
     background-color: #ffffffa6;
+    overflow: auto;
 
+}
+
+.container p{
+padding: 15px;
+overflow:hidden;
 }
 
 .container img {
     height: 75%;
+    float:left;
 }
 
 .container h2 {
-    padding: 20px;
+    padding: 10px;
 
+}
+
+.shelf {
+width: 30%;
+margin-left:36%;
+background: #edd2cc;
+border-radius: 5px;
 }
 
 
